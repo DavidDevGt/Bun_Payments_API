@@ -1,0 +1,27 @@
+[test]
+# Test runner configuration
+root = "tests"
+preload = ["tests/setup.ts"]
+timeout = 10000  # 10 second timeout per test
+bail = false      # Run all tests even if one fails
+coverage = true
+coverageReporter = ["text", "lcov"]
+coverageThreshold = {
+  lines = 80,
+  functions = 80,
+  branches = 75,
+  statements = 80
+}
+
+[package]
+# Module resolution
+install = "auto"
+
+[bundle]
+# Build configuration
+target = "bun"
+minify = true
+
+[define]
+# Environment variables for tests
+"process.env.NODE_ENV" = "test"
