@@ -1,0 +1,283 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Bun Payments API",
+    "description": "RESTful API for monthly service payment management",
+    "version": "1.0.0",
+    "contact": {
+      "name": "API Support",
+      "email": "support@example.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development Server"
+    }
+  ],
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "tags": ["Health"],
+        "responses": {
+          "200": {
+            "description": "Server is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string" },
+                    "timestamp": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/services": {
+      "get": {
+        "summary": "Get all services",
+        "tags": ["Services"],
+        "responses": {
+          "200": {
+            "description": "List of services"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new service",
+        "tags": ["Services"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "amount", "dueDate", "category"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "amount": { "type": "number" },
+                  "dueDate": { "type": "integer" },
+                  "category": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Service created" },
+          "400": { "description": "Validation error" }
+        }
+      }
+    },
+    "/api/v1/services/{id}": {
+      "get": {
+        "summary": "Get service by ID",
+        "tags": ["Services"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Service details" },
+          "404": { "description": "Service not found" }
+        }
+      },
+      "put": {
+        "summary": "Update service",
+        "tags": ["Services"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": { "type": "string" },
+                  "amount": { "type": "number" },
+                  "dueDate": { "type": "integer" },
+                  "category": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Service updated" },
+          "404": { "description": "Service not found" }
+        }
+      },
+      "delete": {
+        "summary": "Delete service",
+        "tags": ["Services"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Service deleted" },
+          "404": { "description": "Service not found" }
+        }
+      }
+    },
+    "/api/v1/payments/monthly": {
+      "post": {
+        "summary": "Create monthly payments",
+        "tags": ["Payments"],
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "schema": { "type": "string" },
+            "example": "2026-04"
+          }
+        ],
+        "responses": {
+          "201": { "description": "Monthly payments created" }
+        }
+      }
+    },
+    "/api/v1/payments/month": {
+      "get": {
+        "summary": "Get payments by month",
+        "tags": ["Payments"],
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "schema": { "type": "string" },
+            "example": "2026-04"
+          }
+        ],
+        "responses": {
+          "200": { "description": "List of payments" }
+        }
+      }
+    },
+    "/api/v1/payments/summary/month": {
+      "get": {
+        "summary": "Get monthly summary",
+        "tags": ["Payments"],
+        "parameters": [
+          {
+            "name": "month",
+            "in": "query",
+            "schema": { "type": "string" },
+            "example": "2026-04"
+          }
+        ],
+        "responses": {
+          "200": { "description": "Monthly summary" }
+        }
+      }
+    },
+    "/api/v1/payments/{id}/status": {
+      "put": {
+        "summary": "Update payment status",
+        "tags": ["Payments"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["status"],
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": ["pending", "paid", "overdue"]
+                  },
+                  "paymentMethod": { "type": "string" },
+                  "paymentDate": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Payment updated" },
+          "404": { "description": "Payment not found" }
+        }
+      }
+    },
+    "/api/v1/payments/service/{serviceId}": {
+      "get": {
+        "summary": "Get service payment history",
+        "tags": ["Payments"],
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Payment history" },
+          "404": { "description": "Service not found" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Service": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "amount": { "type": "number" },
+          "dueDate": { "type": "integer" },
+          "category": { "type": "string" },
+          "createdAt": { "type": "integer" },
+          "updatedAt": { "type": "integer" }
+        }
+      },
+      "Payment": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "serviceId": { "type": "integer" },
+          "amount": { "type": "number" },
+          "status": {
+            "type": "string",
+            "enum": ["pending", "paid", "overdue"]
+          },
+          "paymentMethod": { "type": "string" },
+          "paymentDate": { "type": "integer" },
+          "dueDate": { "type": "integer" },
+          "month": { "type": "string" },
+          "createdAt": { "type": "integer" },
+          "updatedAt": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "bun-payments-api",
+  "version": 2,
+  "buildCommand": "bun run build",
+  "framework": "bun",
+  "envPrefix": "",
+  "env": {
+    "PORT": "3000",
+    "NODE_ENV": "production"
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/dist/index.js"
+    }
+  ]
+}
