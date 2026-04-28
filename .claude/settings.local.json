@@ -3,7 +3,12 @@
     "allow": [
       "Bash(bun install *)",
       "Bash(bun run *)",
-      "Bash(awk '{print $9, \"\\(\" $5 \"\\)\"}')"
+      "Bash(awk '{print $9, \"\\(\" $5 \"\\)\"}')",
+      "Bash(bun test *)",
+      "Bash(echo \"Tests passed with exit code $?\")",
+      "Bash(echo \"Exit code: $?\")",
+      "Bash(cd C:\\\\\\\\Users\\\\\\\\josue\\\\\\\\dockerT\\\\\\\\Bun_Payments_API)",
+      "Bash(echo \"✗ test:all failed with exit code $?\")"
     ]
   }
 }
